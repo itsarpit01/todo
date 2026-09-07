@@ -1,32 +1,55 @@
 import { useState } from "react";
 
 export default function App() {
-  // 1. State to hold the list of tasks (an array)
+
   const [tasks, setTasks] = useState([]);
-  // 2. State to hold whatever the user is currently typing
+  
   const [input, setInput] = useState("");
 
-  // Runs when the "Add" button is clicked (or Enter is pressed)
-  function addTask() {
-    if (input.trim() === "") return; // ignore empty input
+  const [currentTaskId, setCurrentTaskId] = useState(null);
+
+
+  function handleTask(isUpdate) {
+    if (input.trim() === "") return; 
+
+    if(isUpdate && currentTaskId !== null){
+      const updatedTasks = tasks.map((task) => {
+        if(task.id === currentTaskId){
+          return { ...task, text: input };
+        }
+        return task;
+      })
+      setTasks(updatedTasks);
+      setInput("");
+      setCurrentTaskId(null);
+      return;
+    }
 
     const newTask = {
-      id: Date.now(), // unique id
+      id: Date.now(), 
       text: input,
     };
 
-    setTasks([...tasks, newTask]); // add new task into the array
-    setInput(""); // clear input box
+    setTasks([newTask, ...tasks]); 
+    setInput(""); 
   }
 
-  // Runs when a task's delete button is clicked
+ 
   function deleteTask(id) {
-    setTasks(tasks.filter((task) => task.id !== id)); // remove that one task
+    setTasks(tasks.filter((task) => task.id !== id)); 
   }
 
   function handleKeyDown(e) {
-    if (e.key === "Enter") addTask();
+    if (e.key === "Enter") handleTask(isUpdate);
   }
+
+  function updateTask(id){
+    const task = tasks.filter((task) => task.id === id)[0];
+    setInput(task.text);
+    setCurrentTaskId(id);
+  }
+
+  const isUpdate = tasks.some((task) => task.id === currentTaskId);
 
   return (
     <div className="todo-container">
@@ -41,8 +64,8 @@ export default function App() {
           placeholder="Add a new task..."
           className="task-input"
         />
-        <button onClick={addTask} className="add-button">
-          Add
+        <button onClick={() => handleTask(isUpdate)} className="add-button">
+          {isUpdate ? "Update" : "Add"}
         </button>
       </div>
 
@@ -53,6 +76,12 @@ export default function App() {
           {tasks.map((task) => (
             <li key={task.id} className="task-item">
               <span>{task.text}</span>
+               <button
+                onClick={() => updateTask(task.id)}
+                className="edit-button"
+              >
+                Edit
+              </button>
               <button
                 onClick={() => deleteTask(task.id)}
                 className="delete-button"
