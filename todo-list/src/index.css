@@ -69,3 +69,57 @@ body {
 .delete-button:hover {
   background-color: #c0392b;
 }
+
+.edit-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  margin-left: 8px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #2980b9;
+}
+
+.edit-input {
+  flex: 1;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-right: 8px;
+}
+
+.save-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  margin-left: 8px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background-color: #43a047;
+}
+
+.cancel-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  margin-left: 8px;
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: #7f8c8d;
+}

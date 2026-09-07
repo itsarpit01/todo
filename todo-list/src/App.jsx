@@ -6,24 +6,12 @@ export default function App() {
   
   const [input, setInput] = useState("");
 
-  const [currentTaskId, setCurrentTaskId] = useState(null);
+  const [editingId, setEditingId] = useState(null);
 
+  const [editInput, setEditInput] = useState("");
 
-  function handleTask(isUpdate) {
+  function handleTask() {
     if (input.trim() === "") return; 
-
-    if(isUpdate && currentTaskId !== null){
-      const updatedTasks = tasks.map((task) => {
-        if(task.id === currentTaskId){
-          return { ...task, text: input };
-        }
-        return task;
-      })
-      setTasks(updatedTasks);
-      setInput("");
-      setCurrentTaskId(null);
-      return;
-    }
 
     const newTask = {
       id: Date.now(), 
@@ -40,16 +28,35 @@ export default function App() {
   }
 
   function handleKeyDown(e) {
-    if (e.key === "Enter") handleTask(isUpdate);
+    if (e.key === "Enter") handleTask();
+  }
+  function startEdit(task){
+    setEditingId(task.id);
+    setEditInput(task.text);
   }
 
-  function updateTask(id){
-    const task = tasks.filter((task) => task.id === id)[0];
-    setInput(task.text);
-    setCurrentTaskId(id);
+  function cancelEdit(){
+    setEditingId(null);
+    setEditInput("");
   }
 
-  const isUpdate = tasks.some((task) => task.id === currentTaskId);
+  function saveEdit(id){
+    if (editInput.trim() === "") return;
+
+    const updatedTasks = tasks.map((task) => {
+      if(task.id === id){
+        return { ...task, text: editInput };
+      }
+      return task;
+    })
+    setTasks(updatedTasks);
+    setEditingId(null);
+    setEditInput("");
+  }
+
+  function handleEditKeyDown(e, id) {
+    if (e.key === "Enter") saveEdit(id);
+  }
 
   return (
     <div className="todo-container">
@@ -64,8 +71,8 @@ export default function App() {
           placeholder="Add a new task..."
           className="task-input"
         />
-        <button onClick={() => handleTask(isUpdate)} className="add-button">
-          {isUpdate ? "Update" : "Add"}
+        <button onClick={handleTask} className="add-button">
+          Add
         </button>
       </div>
 
@@ -73,23 +80,47 @@ export default function App() {
         <p className="empty-text">No tasks yet. Add one above!</p>
       ) : (
         <ul className="task-list">
-          {tasks.map((task) => (
-            <li key={task.id} className="task-item">
-              <span>{task.text}</span>
-               <button
-                onClick={() => updateTask(task.id)}
-                className="edit-button"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => deleteTask(task.id)}
-                className="delete-button"
-              >
-                Delete
-              </button>
-            </li>
-          ))}
+          {tasks.map((task) => {
+
+
+            if (task.id === editingId) {
+              return (
+                <li key={task.id} className="task-item">
+                  <input
+                    type="text"
+                    value={editInput}
+                    onChange={(e) => setEditInput(e.target.value)}
+                    onKeyDown={(e) => handleEditKeyDown(e, task.id)}
+                    className="edit-input"
+                  />
+                  <button onClick={() => saveEdit(task.id)} className="save-button">
+                    Save
+                  </button>
+                  <button onClick={cancelEdit} className="cancel-button">
+                    Cancel
+                  </button>
+                </li>
+              );
+            }
+
+            return (
+              <li key={task.id} className="task-item">
+                <span>{task.text}</span>
+                <button
+                  onClick={() => startEdit(task)}
+                  className="edit-button"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  className="delete-button"
+                >
+                  Delete
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>
