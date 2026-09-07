@@ -123,3 +123,26 @@ body {
 .cancel-button:hover {
   background-color: #7f8c8d;
 }
+.navbar {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 16px;
+  background-color: #333;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+.page-container {
+  max-width: 500px;
+  margin: 50px auto;
+  text-align: center;
+}

@@ -1,130 +1,22 @@
-import { useState } from "react";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About-us";
+import Todo from "./pages/Todo";
 
 export default function App() {
-
-  const [tasks, setTasks] = useState([]);
-  
-  const [input, setInput] = useState("");
-
-  const [editingId, setEditingId] = useState(null);
-
-  const [editInput, setEditInput] = useState("");
-
-  function handleTask() {
-    if (input.trim() === "") return; 
-
-    const newTask = {
-      id: Date.now(), 
-      text: input,
-    };
-
-    setTasks([newTask, ...tasks]); 
-    setInput(""); 
-  }
-
- 
-  function deleteTask(id) {
-    setTasks(tasks.filter((task) => task.id !== id)); 
-  }
-
-  function handleKeyDown(e) {
-    if (e.key === "Enter") handleTask();
-  }
-  function startEdit(task){
-    setEditingId(task.id);
-    setEditInput(task.text);
-  }
-
-  function cancelEdit(){
-    setEditingId(null);
-    setEditInput("");
-  }
-
-   function saveEdit(id){
-    if (editInput.trim() === "") return;
-
-    const taskToUpdate = tasks.find((task) => task.id === id);
-
-    const updatedTask = { ...taskToUpdate, text: editInput };
-
-    const otherTasks = tasks.filter((task) => task.id !== id);
-
-  
-    setTasks([updatedTask, ...otherTasks]);
-
-    setEditingId(null);
-    setEditInput("");
-  }
-
-  function handleEditKeyDown(e, id) {
-    if (e.key === "Enter") saveEdit(id);
-  }
-
   return (
-    <div className="todo-container">
-      <h1>My To-Do List</h1>
+    <BrowserRouter>
+      <nav className="navbar">
+        <Link to="/">Home</Link>
+        <Link to="/todo">Todo</Link>
+        <Link to="/about">About Us</Link>
+      </nav>
 
-      <div className="input-row">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Add a new task..."
-          className="task-input"
-        />
-        <button onClick={handleTask} className="add-button">
-          Add
-        </button>
-      </div>
-
-      {tasks.length === 0 ? (
-        <p className="empty-text">No tasks yet. Add one above!</p>
-      ) : (
-        <ul className="task-list">
-          {tasks.map((task) => {
-
-
-            if (task.id === editingId) {
-              return (
-                <li key={task.id} className="task-item">
-                  <input
-                    type="text"
-                    value={editInput}
-                    onChange={(e) => setEditInput(e.target.value)}
-                    onKeyDown={(e) => handleEditKeyDown(e, task.id)}
-                    className="edit-input"
-                  />
-                  <button onClick={() => saveEdit(task.id)} className="save-button">
-                    Save
-                  </button>
-                  <button onClick={cancelEdit} className="cancel-button">
-                    Cancel
-                  </button>
-                </li>
-              );
-            }
-
-            return (
-              <li key={task.id} className="task-item">
-                <span>{task.text}</span>
-                <button
-                  onClick={() => startEdit(task)}
-                  className="edit-button"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => deleteTask(task.id)}
-                  className="delete-button"
-                >
-                  Delete
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/todo" element={<Todo />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
