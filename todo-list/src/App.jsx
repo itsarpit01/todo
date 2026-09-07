@@ -40,16 +40,18 @@ export default function App() {
     setEditInput("");
   }
 
-  function saveEdit(id){
+   function saveEdit(id){
     if (editInput.trim() === "") return;
 
-    const updatedTasks = tasks.map((task) => {
-      if(task.id === id){
-        return { ...task, text: editInput };
-      }
-      return task;
-    })
-    setTasks(updatedTasks);
+    const taskToUpdate = tasks.find((task) => task.id === id);
+
+    const updatedTask = { ...taskToUpdate, text: editInput };
+
+    const otherTasks = tasks.filter((task) => task.id !== id);
+
+  
+    setTasks([updatedTask, ...otherTasks]);
+
     setEditingId(null);
     setEditInput("");
   }
