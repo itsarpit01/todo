@@ -1,21 +1,15 @@
 import { useState } from "react";
 
-export default function App() {
+export default function Todo() {
 
   const [tasks, setTasks] = useState([]);
-  
   const [input, setInput] = useState("");
-
   const [editingId, setEditingId] = useState(null);
-
   const [editInput, setEditInput] = useState("");
 
   function handleTask() {
     if (input.trim() === "") return; 
-
-    const newTask = {
-      id: Date.now(), 
-      text: input,
+    const newTask = {id: Date.now(), text: input
     };
 
     setTasks([newTask, ...tasks]); 
@@ -42,16 +36,11 @@ export default function App() {
 
    function saveEdit(id){
     if (editInput.trim() === "") return;
-
     const taskToUpdate = tasks.find((task) => task.id === id);
-
     const updatedTask = { ...taskToUpdate, text: editInput };
-
     const otherTasks = tasks.filter((task) => task.id !== id);
 
-  
     setTasks([updatedTask, ...otherTasks]);
-
     setEditingId(null);
     setEditInput("");
   }
@@ -83,8 +72,6 @@ export default function App() {
       ) : (
         <ul className="task-list">
           {tasks.map((task) => {
-
-
             if (task.id === editingId) {
               return (
                 <li key={task.id} className="task-item">
