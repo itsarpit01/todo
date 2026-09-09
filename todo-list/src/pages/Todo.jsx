@@ -14,11 +14,6 @@ export default function Todo() {
 
 
   useEffect(() => {
-    saveTasks(tasks);
-  }, [tasks]);
-
-
-  useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
     }, 200);
@@ -32,13 +27,7 @@ export default function Todo() {
   function handleTask() {
     if (input.trim() === "") return; 
 
-    let alreadyExists = false;
-
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].text === input) {
-        alreadyExists = true;
-      }
-    }
+    const alreadyExists = tasks.find((task) => task.text === input);
 
     if (alreadyExists) {
       alert("This task already exists!");
@@ -46,14 +35,19 @@ export default function Todo() {
     }
 
     const newTask = { id: Date.now(), text: input };
+    const updatedTasks = [newTask, ...tasks];
 
-    setTasks([newTask, ...tasks]); 
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
+
     setInput(""); 
   }
 
  
   function deleteTask(id) {
-    setTasks(tasks.filter((task) => task.id !== id)); 
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
   }
 
   function handleKeyDown(e) {
@@ -77,7 +71,9 @@ export default function Todo() {
     const updatedTask = { ...taskToUpdate, text: editInput };
     const otherTasks = tasks.filter((task) => task.id !== id);
 
-    setTasks([updatedTask, ...otherTasks]);
+    const updatedTasks = [updatedTask, ...otherTasks];
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
 
     setEditingId(null);
     setEditInput("");
@@ -100,12 +96,15 @@ export default function Todo() {
       <h1>My To-Do List</h1>
 
       <div className="input-row">
-        <input
+          <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search tasks..."
+          placeholder={tasks.length === 0 ? "Add a task first..." : "Search tasks..."}
           className="task-input"
+          disabled={tasks.length === 0}
+          autoComplete="off"
+          spellCheck="false"
         />
       </div>
 
