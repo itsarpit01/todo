@@ -8,14 +8,23 @@ export default function Todo() {
   const [editInput, setEditInput] = useState("");
 
   function handleTask() {
-    if (input.trim() === "") return; 
-    const newTask = {id: Date.now(), text: input
-    };
+    if (input.trim() === "") return;
 
-    setTasks([newTask, ...tasks]); 
-    setInput(""); 
+    let alreadyExists = false;
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].text === input) {
+        alreadyExists = true;
+      }
+    }
+    if (alreadyExists) {
+      alert("This task already exists!");
+      return;
+    }
+    const newTask = { id: Date.now(), text: input };
+
+    setTasks([newTask, ...tasks]);
+    setInput("");
   }
-
  
   function deleteTask(id) {
     setTasks(tasks.filter((task) => task.id !== id)); 

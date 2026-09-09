@@ -1,5 +1,12 @@
+import { BrowserRouter } from "react-router-dom";
+import Navbar from "./pages/Navbar";
 import AppRoutes from "./routes/AppRoutes";
 
 export default function App() {
-  return <AppRoutes />;
+  return (
+    <BrowserRouter>
+      <Navbar />
+      <AppRoutes />
+    </BrowserRouter>
+  );
 }
