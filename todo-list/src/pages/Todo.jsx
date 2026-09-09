@@ -1,30 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { loadTasks, saveTasks } from "../utils/LocalStorage";
 
 export default function Todo() {
+  const [tasks, setTasks] = useState(loadTasks);
 
-  const [tasks, setTasks] = useState([]);
   const [input, setInput] = useState("");
+
   const [editingId, setEditingId] = useState(null);
   const [editInput, setEditInput] = useState("");
 
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+
+  useEffect(() => {
+    saveTasks(tasks);
+  }, [tasks]);
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 200);
+
+    return () => {
+      clearTimeout(timer); 
+    };
+  }, [search]);
+
+
   function handleTask() {
-    if (input.trim() === "") return;
+    if (input.trim() === "") return; 
 
     let alreadyExists = false;
+
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].text === input) {
         alreadyExists = true;
       }
     }
+
     if (alreadyExists) {
       alert("This task already exists!");
       return;
     }
+
     const newTask = { id: Date.now(), text: input };
 
-    setTasks([newTask, ...tasks]);
-    setInput("");
+    setTasks([newTask, ...tasks]); 
+    setInput(""); 
   }
+
  
   function deleteTask(id) {
     setTasks(tasks.filter((task) => task.id !== id)); 
@@ -33,6 +59,7 @@ export default function Todo() {
   function handleKeyDown(e) {
     if (e.key === "Enter") handleTask();
   }
+
   function startEdit(task){
     setEditingId(task.id);
     setEditInput(task.text);
@@ -43,13 +70,15 @@ export default function Todo() {
     setEditInput("");
   }
 
-   function saveEdit(id){
+  function saveEdit(id){
     if (editInput.trim() === "") return;
+
     const taskToUpdate = tasks.find((task) => task.id === id);
     const updatedTask = { ...taskToUpdate, text: editInput };
     const otherTasks = tasks.filter((task) => task.id !== id);
 
     setTasks([updatedTask, ...otherTasks]);
+
     setEditingId(null);
     setEditInput("");
   }
@@ -58,9 +87,27 @@ export default function Todo() {
     if (e.key === "Enter") saveEdit(id);
   }
 
+  let visibleTasks = tasks;
+
+  if (debouncedSearch.trim().length >= 2) {
+    visibleTasks = tasks.filter((task) =>
+      task.text.toLowerCase().includes(debouncedSearch.toLowerCase())
+    );
+  }
+
   return (
     <div className="todo-container">
       <h1>My To-Do List</h1>
+
+      <div className="input-row">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search tasks..."
+          className="task-input"
+        />
+      </div>
 
       <div className="input-row">
         <input
@@ -76,11 +123,12 @@ export default function Todo() {
         </button>
       </div>
 
-      {tasks.length === 0 ? (
-        <p className="empty-text">No tasks yet. Add one above!</p>
+      {visibleTasks.length === 0 ? (
+        <p className="empty-text">No tasks found.</p>
       ) : (
         <ul className="task-list">
-          {tasks.map((task) => {
+          {visibleTasks.map((task) => {
+
             if (task.id === editingId) {
               return (
                 <li key={task.id} className="task-item">
