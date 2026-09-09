@@ -5,9 +5,9 @@ export default function Navbar() {
     <div className="sidebar">
       <h2 className="sidebar-title">To~Do</h2>
       <NavLink to="/">Home</NavLink>
+      <NavLink to="/about">About Us</NavLink>
       <NavLink to="/todo">Todo</NavLink>
       <NavLink to="/users">Users</NavLink>
-      <NavLink to="/about">About Us</NavLink>
     </div>
   );
 }
