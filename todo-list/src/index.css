@@ -146,3 +146,41 @@ body {
   margin: 50px auto;
   text-align: center;
 }
+.app-layout {
+  display: flex;
+}
+
+.sidebar {
+  width: 200px;
+  min-height: 100vh;
+  background-color: #333;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar-title {
+  color: white;
+  margin: 0 0 10px 0;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.sidebar a:hover {
+  text-decoration: underline;
+}
+
+.page-content {
+  flex: 1;
+  padding: 20px;
+}
+.sidebar a.active {
+  background-color: #555;
+  padding: 8px;
+  border-radius: 6px;
+}
