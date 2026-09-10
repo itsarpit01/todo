@@ -48,12 +48,16 @@ body {
 
 .task-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 10px 14px;
   margin-bottom: 8px;
   background-color: #f4f4f4;
   border-radius: 6px;
+}
+
+.task-item span {
+  flex: 1;
+  text-align: left;
 }
 
 .delete-button {
@@ -74,6 +78,7 @@ body {
   padding: 6px 12px;
   font-size: 14px;
   margin-left: 8px;
+  margin-right: 8px;
   background-color: #3498db;
   color: white;
   border: none;
@@ -146,6 +151,12 @@ body {
   margin: 50px auto;
   text-align: center;
 }
+.page-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
 .app-layout {
   display: flex;
 }
@@ -153,36 +164,36 @@ body {
 .sidebar {
   width: 200px;
   min-height: 100vh;
-  background-color: #333;
+  background-color: #94A3B8;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 6px;
 }
 
 .sidebar-title {
-  color: white;
-  margin: 0 0 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #1e293b;
+  margin: 0 0 14px 0;
 }
 
 .sidebar a {
-  color: white;
+  color: #1e293b;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 6px;
 }
 
 .sidebar a:hover {
-  text-decoration: underline;
+  background-color: #7c8fa8;
 }
 
-.page-content {
-  flex: 1;
-  padding: 20px;
-}
 .sidebar a.active {
-  background-color: #555;
-  padding: 8px;
-  border-radius: 6px;
+  background-color: #475569;
+  color: #ffffff;
+  font-weight: 500;
 }
 .users-container {
   max-width: 800px;
@@ -224,4 +235,16 @@ body {
 }
 .no-wrap {
   white-space: nowrap;
+}
+
+.topbar {
+  background-color: #94A3B8;
+  padding: 16px 24px;
+}
+
+.topbar-title {
+  color: #1e293b;
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
 }

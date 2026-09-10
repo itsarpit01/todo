@@ -25,16 +25,19 @@ export default function Todo() {
 
 
   function handleTask() {
-    if (input.trim() === "") return; 
+    const trimmedInput = input.trim();
+    if (trimmedInput === "") return;
 
-    const alreadyExists = tasks.find((task) => task.text === input);
+    const alreadyExists = tasks.find(
+      (task) => task.text.toLowerCase() === trimmedInput.toLowerCase()
+    );
 
     if (alreadyExists) {
       alert("This task already exists!");
       return;
     }
 
-    const newTask = { id: Date.now(), text: input };
+    const newTask = { id: Date.now(), text: trimmedInput };
     const updatedTasks = [newTask, ...tasks];
 
     setTasks(updatedTasks);
@@ -65,10 +68,11 @@ export default function Todo() {
   }
 
   function saveEdit(id){
-    if (editInput.trim() === "") return;
+    const trimmedInput = editInput.trim();
+    if (trimmedInput === "") return;
 
     const taskToUpdate = tasks.find((task) => task.id === id);
-    const updatedTask = { ...taskToUpdate, text: editInput };
+    const updatedTask = { ...taskToUpdate, text: trimmedInput };
     const otherTasks = tasks.filter((task) => task.id !== id);
 
     const updatedTasks = [updatedTask, ...otherTasks];
@@ -93,8 +97,6 @@ export default function Todo() {
 
   return (
     <div className="todo-container">
-      <h1>My To-Do List</h1>
-
       <div className="input-row">
           <input
           type="text"
