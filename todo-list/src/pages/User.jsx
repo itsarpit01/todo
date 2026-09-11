@@ -31,6 +31,14 @@ export default function Users() {
 
   const totalPages = Math.ceil(total / usersPerPage);
 
+  function goToFirstPage() {
+    setPage(1);
+  }
+
+  function goToLastPage() {
+    setPage(totalPages);
+  }
+
   function goToPreviousPage() {
     if (page > 1) {
       setPage(page - 1);
@@ -83,6 +91,9 @@ export default function Users() {
           </table>
 
           <div className="input-row">
+            <button onClick={goToFirstPage} className="edit-button">
+              First
+            </button>
             <button onClick={goToPreviousPage} className="edit-button">
               Previous
             </button>
@@ -91,6 +102,9 @@ export default function Users() {
             </span>
             <button onClick={goToNextPage} className="edit-button">
               Next
+            </button>
+            <button onClick={goToLastPage} className="edit-button">
+              Last
             </button>
           </div>
         </>
