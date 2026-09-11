@@ -301,6 +301,16 @@ body {
   flex: 1;
 }
 
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-header .add-button {
+  text-decoration: none;
+}
+
 .address-input {
   width: 100%;
   min-height: 80px;

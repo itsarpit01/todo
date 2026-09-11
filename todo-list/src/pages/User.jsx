@@ -48,11 +48,12 @@ export default function Users() {
 
   return (
     <div className="users-container">
-      <h1>Users</h1>
-
-      <Link to="/users/add" className="add-button" style={{ display: "inline-block", marginBottom: "16px" }}>
-        Add User
-      </Link>
+   <div className="page-header">
+  <h1>Users</h1>
+  <Link to="/users/add" className="add-button">
+    + Add User
+  </Link>
+</div>
 
       {loading ? (
         <p className="empty-text">Loading users...</p>
