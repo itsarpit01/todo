@@ -261,6 +261,53 @@ body {
   white-space: nowrap;
 }
 
+.user-form {
+  max-width: 400px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.field-hint {
+  color: #888;
+  font-size: 12px;
+  margin: 4px 0 0 0;
+}
+
+.field-error {
+  color: #e74c3c;
+  font-size: 13px;
+  margin: 4px 0 0 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 14px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.address-input {
+  width: 100%;
+  min-height: 80px;
+  font-family: sans-serif;
+  resize: vertical;
+}
+
 @media (max-width: 768px) {
 
   .app-layout {
@@ -350,5 +397,10 @@ body {
 
   .topbar-title {
     font-size: 16px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 14px;
   }
 }
