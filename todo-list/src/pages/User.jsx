@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { fetchUsers } from "../api/userApi";
 
 const usersPerPage = 10;
 
@@ -7,39 +8,28 @@ export default function Users() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-const [error, setError] = useState("");
+  const [error, setError] = useState("");
 
-useEffect(() => {
-  async function fetchUsers() {
-    setLoading(true);
-    setError("");
+  useEffect(() => {
+    async function loadUsers() {
+      setLoading(true);
+      setError("");
 
-    const skip = (page - 1) * usersPerPage;
-
-    try {
-      const response = await fetch(
-        `https://dummyjson.com/users?limit=${usersPerPage}&skip=${skip}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Something went wrong while fetching users");
+      try {
+        const data = await fetchUsers(page, usersPerPage);
+        setUsers(data?.users ?? []);
+        setTotal(data.total);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-
-      const data = await response.json();
-
-      setUsers(data?.users ?? []);
-      setTotal(data.total);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
     }
-  }
 
-  fetchUsers();
-}, [page]);
+    loadUsers();
+  }, [page]);
 
-const totalPages = Math.ceil(total / usersPerPage);
+  const totalPages = Math.ceil(total / usersPerPage);
 
   function goToPreviousPage() {
     if (page > 1) {
@@ -59,6 +49,8 @@ const totalPages = Math.ceil(total / usersPerPage);
 
       {loading ? (
         <p className="empty-text">Loading users...</p>
+      ) : error ? (
+        <p className="empty-text">{error}</p>
       ) : (
         <>
           <table className="users-table">
