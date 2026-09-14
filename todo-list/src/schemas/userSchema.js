@@ -1,29 +1,36 @@
 import { z } from "zod";
 
-// This defines the validation rules for the Add/Edit User form.
-// React Hook Form uses this (via zodResolver) to check the data
-// before allowing the form to submit.
+const nameRegex = /^[A-Za-z\s]+$/;
 
 export const userSchema = z.object({
   firstName: z
     .string()
-    .min(2, "First name must be at least 2 characters"),
+    .trim()
+    .min(2, "First name must be at least 2 characters")
+    .regex(nameRegex, "First name can only contain letters"),
 
   lastName: z
     .string()
-    .min(2, "Last name must be at least 2 characters"),
+    .trim()
+    .min(2, "Last name must be at least 2 characters")
+    .regex(nameRegex, "Last name can only contain letters"),
 
   email: z
     .string()
+    .trim()
+    .min(1, "Email is required")
     .email("Enter a valid email address"),
 
   phone: z
     .string()
-    .regex(/^[0-9+\-\s()]{7,20}$/, "Enter a valid phone number"),
+    .trim()
+    .regex(/^[0-9+\-\s()]{7,20}$/, "Enter a valid phone number")
+    .refine((val) => /\d/.test(val), "Phone number must contain digits"),
 
   age: z
     .coerce
     .number({ invalid_type_error: "Age must be a number" })
+    .int("Age must be a whole number")
     .min(1, "Age must be at least 1")
     .max(120, "Age must be less than 120"),
 
@@ -34,5 +41,6 @@ export const userSchema = z.object({
 
   address: z
     .string()
+    .trim()
     .min(5, "Address must be at least 5 characters"),
 });

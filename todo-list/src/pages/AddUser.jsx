@@ -16,6 +16,7 @@ export default function AddUser() {
     reset,
   } = useForm({
     resolver: zodResolver(userSchema),
+     mode: "onChange", 
   });
 
   async function onSubmit(formData) {

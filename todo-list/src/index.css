@@ -318,6 +318,24 @@ body {
   resize: vertical;
 }
 
+.user-details-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.user-details-avatar {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 12px;
+}
+
+.user-details-edit-link {
+  display: inline-block;
+  margin-top: 16px;
+}
+
 @media (max-width: 768px) {
 
   .app-layout {

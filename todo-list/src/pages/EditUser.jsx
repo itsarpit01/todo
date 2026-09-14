@@ -19,6 +19,7 @@ export default function EditUser() {
     reset,
   } = useForm({
     resolver: zodResolver(userSchema),
+     mode: "onChange", 
   });
 
   useEffect(() => {
@@ -115,6 +116,9 @@ export default function EditUser() {
           <div className="form-group">
             <label>Age *</label>
             <input
+             type="number"
+             min="1"
+             max="120"
               {...register("age")}
               placeholder="Age"
               className="task-input"
