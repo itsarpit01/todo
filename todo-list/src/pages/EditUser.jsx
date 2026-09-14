@@ -19,7 +19,7 @@ export default function EditUser() {
     reset,
   } = useForm({
     resolver: zodResolver(userSchema),
-     mode: "onChange", 
+    mode: "onChange",
   });
 
   useEffect(() => {
@@ -35,10 +35,10 @@ export default function EditUser() {
           phone: user.phone,
           age: user.age,
           gender: user.gender === "female" ? "female" : "male",
-          address: user.address?.address ?? "",
+          address: typeof user.address === "string" ? user.address : user.address?.address ?? "",
         });
       } catch (err) {
-        setApiError(err.message);
+        setApiError(err?.message || "Could not load this user");
       } finally {
         setLoading(false);
       }
@@ -55,7 +55,7 @@ export default function EditUser() {
       reset();
       navigate("/users");
     } catch (err) {
-      setApiError(err.message);
+      setApiError(err?.message || "Something went wrong. Please try again.");
     }
   }
 
@@ -72,6 +72,28 @@ export default function EditUser() {
       {apiError && <p className="empty-text">{apiError}</p>}
 
       <form onSubmit={handleSubmit(onSubmit)} className="user-form">
+        <div className="form-row">
+          <div className="form-group">
+            <label>First Name *</label>
+            <input
+              {...register("firstName")}
+              placeholder="First name"
+              className="task-input"
+            />
+            {errors.firstName && <p className="field-error">{errors.firstName.message}</p>}
+          </div>
+
+          <div className="form-group">
+            <label>Last Name *</label>
+            <input
+              {...register("lastName")}
+              placeholder="Last name"
+              className="task-input"
+            />
+            {errors.lastName && <p className="field-error">{errors.lastName.message}</p>}
+          </div>
+        </div>
+
         <div className="form-group">
           <label>Email *</label>
           <input
@@ -79,27 +101,10 @@ export default function EditUser() {
             placeholder="you@example.com"
             className="task-input"
           />
+          <p className="field-hint">
+            Please make sure your email ID is correct.
+          </p>
           {errors.email && <p className="field-error">{errors.email.message}</p>}
-        </div>
-
-        <div className="form-group">
-          <label>First Name *</label>
-          <input
-            {...register("firstName")}
-            placeholder="First name"
-            className="task-input"
-          />
-          {errors.firstName && <p className="field-error">{errors.firstName.message}</p>}
-        </div>
-
-        <div className="form-group">
-          <label>Last Name *</label>
-          <input
-            {...register("lastName")}
-            placeholder="Last name"
-            className="task-input"
-          />
-          {errors.lastName && <p className="field-error">{errors.lastName.message}</p>}
         </div>
 
         <div className="form-row">
@@ -116,9 +121,9 @@ export default function EditUser() {
           <div className="form-group">
             <label>Age *</label>
             <input
-             type="number"
-             min="1"
-             max="120"
+              type="number"
+              min="1"
+              max="120"
               {...register("age")}
               placeholder="Age"
               className="task-input"
@@ -139,10 +144,11 @@ export default function EditUser() {
 
         <div className="form-group">
           <label>Address *</label>
-          <input
+          <textarea
             {...register("address")}
             placeholder="Street, city, state"
-            className="task-input"
+            className="task-input address-input"
+            rows="3"
           />
           {errors.address && <p className="field-error">{errors.address.message}</p>}
         </div>
