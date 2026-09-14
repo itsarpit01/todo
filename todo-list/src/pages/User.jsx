@@ -11,12 +11,27 @@ export default function Users() {
   const [total, setTotal] = useState(0);
   const [error, setError] = useState("");
 
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  // Wait 300ms after typing stops before actually searching
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      setPage(1);
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [search]);
+
   useEffect(() => {
     async function loadUsers() {
       setLoading(true);
       setError("");
       try {
-        const data = await fetchUsers(page, usersPerPage);
+        const data = await fetchUsers(page, usersPerPage, debouncedSearch);
         setUsers(data?.users ?? []);
         setTotal(data.total);
       } catch (err) {
@@ -26,7 +41,7 @@ export default function Users() {
       }
     }
     loadUsers();
-  }, [page]);
+  }, [page, debouncedSearch]);
 
   const totalPages = Math.ceil(total / usersPerPage);
 
@@ -48,17 +63,28 @@ export default function Users() {
 
   return (
     <div className="users-container">
-   <div className="page-header">
-  <h1>Users</h1>
-  <Link to="/users/add" className="add-button">
-    + Add User
-  </Link>
-</div>
+      <div className="page-header">
+        <h1>Users</h1>
+
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search users"
+          className="task-input page-header-search"
+        />
+
+        <Link to="/users/add" className="add-button">
+          + Add User
+        </Link>
+      </div>
 
       {loading ? (
         <p className="empty-text">Loading users...</p>
       ) : error ? (
         <p className="empty-text">{error}</p>
+      ) : users.length === 0 ? (
+        <p className="empty-text">No users found.</p>
       ) : (
         <>
           <table className="users-table">

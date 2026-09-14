@@ -1,9 +1,15 @@
 import axiosClient from "./axiosClient";
 
-export async function fetchUsers(page, usersPerPage) {
+export async function fetchUsers(page, usersPerPage, search = "") {
   const skip = (page - 1) * usersPerPage;
+  let url = `/users?limit=${usersPerPage}&skip=${skip}`;
+
+  if (search.trim() !== "") {
+    url = `/users/search?q=${search}&limit=${usersPerPage}&skip=${skip}`;
+  }
+
   try {
-    const response = await axiosClient.get(`/users?limit=${usersPerPage}&skip=${skip}`);
+    const response = await axiosClient.get(url);
     return response.data;
   } catch (err) {
     throw new Error("Something went wrong while fetching users");
